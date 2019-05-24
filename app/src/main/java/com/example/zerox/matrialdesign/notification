@@ -1,0 +1,28 @@
+   private void sendNotification(String title, String messageBody) {
+        Intent intent;
+        intent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(intent);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String Notification_Channel_id = "com.eramint.adile1";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(Notification_Channel_id, "Notification",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription("eslam Channel");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(getResources().getColor(R.color.colorAccent));
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(this, Notification_Channel_id);
+        notificationCompat.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(messageBody)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+        notificationManager.notify(new Random().nextInt(), notificationCompat.build());
+    }
